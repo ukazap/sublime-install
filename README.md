@@ -1,6 +1,6 @@
-# Sublime Text & Sublime Merge Installer for ARM64 Linux
+# Sublime Text & Sublime Merge Installer for Linux
 
-Downloads, verifies, and installs Sublime Text and Sublime Merge on ARM64 Linux.
+Downloads, verifies, and installs Sublime Text and Sublime Merge on Linux.
 
 Requires: `curl`, `gpg`, `tar`, `sudo`.
 
