@@ -49,7 +49,12 @@ install-sublime-text: sublime_text
 	@mkdir -p ~/.local ~/.local/bin
 	@cp -r temp/sublime_text ~/.local/
 	@mkdir -p ~/.local/share/applications
-	@sed 's|/opt/sublime_text/sublime_text|$(HOME)/.local/sublime_text/sublime_text|g' temp/sublime_text/sublime_text.desktop > ~/.local/share/applications/sublime_text.desktop
+	@sed 's|/opt/sublime_text|$(HOME)/.local/sublime_text|g' temp/sublime_text/sublime_text.desktop > ~/.local/share/applications/sublime_text.desktop
+	@for size in 16x16 32x32 48x48 128x128 256x256; do \
+		mkdir -p ~/.local/share/icons/hicolor/$$size/apps; \
+		cp ~/.local/sublime_text/Icon/$$size/sublime-text.png ~/.local/share/icons/hicolor/$$size/apps/; \
+	done
+	@gtk-update-icon-cache -f -t ~/.local/share/icons/hicolor 2>/dev/null || true
 	@echo '#!/bin/bash' > ~/.local/bin/subl
 	@echo 'exec ~/.local/sublime_text/sublime_text "$$@"' >> ~/.local/bin/subl
 	@chmod +x ~/.local/bin/subl
@@ -73,9 +78,16 @@ verify-sublime-merge: $(PUBKEY_FILE) $(SUBLIME_MERGE_SIGNATURE) $(SUBLIME_MERGE_
 
 install-sublime-merge: sublime_merge
 	@mkdir -p ~/.local ~/.local/bin
+	@rm -rf temp/sublime_merge
+	@mv temp/sublime_merge-$(SUBLIME_ARCH)-tar temp/sublime_merge
 	@cp -r temp/sublime_merge ~/.local/
 	@mkdir -p ~/.local/share/applications
-	@sed 's|/opt/sublime_merge/sublime_merge|$(HOME)/.local/sublime_merge/sublime_merge|g' temp/sublime_merge/sublime_merge.desktop > ~/.local/share/applications/sublime_merge.desktop
+	@sed 's|/opt/sublime_merge|$(HOME)/.local/sublime_merge|g' temp/sublime_merge/sublime_merge.desktop > ~/.local/share/applications/sublime_merge.desktop
+	@for size in 16x16 32x32 48x48 128x128 256x256; do \
+		mkdir -p ~/.local/share/icons/hicolor/$$size/apps; \
+		cp ~/.local/sublime_merge/Icon/$$size/sublime-merge.png ~/.local/share/icons/hicolor/$$size/apps/; \
+	done
+	@gtk-update-icon-cache -f -t ~/.local/share/icons/hicolor 2>/dev/null || true
 	@echo '#!/bin/bash' > ~/.local/bin/smerge
 	@echo 'exec ~/.local/sublime_merge/sublime_merge "$$@"' >> ~/.local/bin/smerge
 	@chmod +x ~/.local/bin/smerge
@@ -92,12 +104,20 @@ uninstall-sublime-text:
 	@rm -rf ~/.local/sublime_text
 	@rm -f ~/.local/share/applications/sublime_text.desktop
 	@rm -f ~/.local/bin/subl
+	@for size in 16x16 32x32 48x48 128x128 256x256; do \
+		rm -f ~/.local/share/icons/hicolor/$$size/apps/sublime-text.png; \
+	done
+	@gtk-update-icon-cache -f -t ~/.local/share/icons/hicolor 2>/dev/null || true
 	@echo "Sublime Text uninstalled"
 
 uninstall-sublime-merge:
 	@rm -rf ~/.local/sublime_merge
 	@rm -f ~/.local/share/applications/sublime_merge.desktop
 	@rm -f ~/.local/bin/smerge
+	@for size in 16x16 32x32 48x48 128x128 256x256; do \
+		rm -f ~/.local/share/icons/hicolor/$$size/apps/sublime-merge.png; \
+	done
+	@gtk-update-icon-cache -f -t ~/.local/share/icons/hicolor 2>/dev/null || true
 	@echo "Sublime Merge uninstalled"
 
 uninstall: uninstall-sublime-text uninstall-sublime-merge
